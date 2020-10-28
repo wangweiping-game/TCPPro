@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using ProtoBuf;
+using sy;
 
 public class NetworkManager : EventDispatcher
 {
@@ -137,13 +138,13 @@ public class NetworkManager : EventDispatcher
         sendMsg((ushort)msgId, null);
     }
 
-    public void SendMessage<T>(ushort msgId, T request)
+    public void SendMessage<T>(MSG_CS msgId, T request)
     {
         requestStream.SetLength(0);
         Serializer.Serialize<T>(requestStream, request);
         sendMsg((ushort)msgId, requestStream);
     }
-    public void SendMessageSync<T>(ushort msgId, T request)
+    public void SendMessageSync<T>(MSG_CS msgId, T request)
     {
         requestStream.SetLength(0);
         Serializer.Serialize<T>(requestStream, request);

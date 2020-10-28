@@ -36,7 +36,6 @@ public class EventDispatcher
         if (eventHandleDic.ContainsKey(type))
         {
             eventHandleDic[type] -= handle;
-//            if (null == eventHandleDic[type]) eventHandleDic.Remove(type);
         }
     }
     

@@ -49,10 +49,10 @@ public class SocketClient
     void OnConnect(IAsyncResult asr)
     {
         Socket sk = (Socket)asr.AsyncState;
-        if (sk != client) return;
+        if (sk != client) 
+            return;
         try
         {
-            Debug.Log("!!!连接成功");
             sk.EndConnect(asr);
             NetworkManager.GetInstance().pushEvent(NET_EVENT.CONNECT_SUCC);
             sk.BeginReceive(byteBuffer, 0, MAX_READ, SocketFlags.None, readCallBack, null);
@@ -91,6 +91,7 @@ public class SocketClient
             }
             else
             {
+                Debug.LogError("连接处理失败");
                 NetworkManager.GetInstance().pushEvent(NET_EVENT.CONNECT_FAIL, SocketError.NotConnected);
             }
         }
@@ -108,7 +109,6 @@ public class SocketClient
         try
         {
             int len = client.EndSend(result);
-//            Debug.LogWarning("成功写入：" + len);
         }
         catch(SocketException ex)
         {
@@ -133,13 +133,9 @@ public class SocketClient
             if (remainingByteLen() >= messageLen)
             {
                 isFullMsg = true;
-                int compressFlag = totalLen & PROTOCOL_HEAD_COMPRESS_MASK;
                 byte[] data = reader.ReadBytes(messageLen);
-                if (0 != compressFlag)
-                {
-                    //data = decompressor.Decompress(data);
-                }
-                Debug.LogWarning("收到协议：" + serialNumber + "::" + mainId.ToString("X"));
+
+                Debug.Log("客户端收到协议："+ mainId.ToString("X"));
                 //断线重连协议号校验
                 if (NetworkManager.GetInstance().handledSerialNumber == UInt16.MaxValue)
                 {
@@ -203,6 +199,7 @@ public class SocketClient
         }
         catch (SocketException ex)
         {
+            Debug.LogError(ex);
         }            
 
         client.Close();

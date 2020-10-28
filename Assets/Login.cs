@@ -17,14 +17,17 @@ public class Login : MonoBehaviour
     {
         
     }
-
-    public void onClick()
+    public void ClickStartServer()
     {
-        NetworkManager.GetInstance().startConnect("192.168.1.102", 1234);
+        Singleton<SocketServer>.GetInstance().Start();
+    }
+    public void ClickStartConnectServer()
+    {
+        NetStateManager.GetInstance().startConnect();
     }
 
-    public void send()
+    public void ClickLogin()
     {
-        NetworkManager.GetInstance().SendMessage(1, "hello world!");
+        InitService.GetInstance().onLoginRequst();
     }
 }
