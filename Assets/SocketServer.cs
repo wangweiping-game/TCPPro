@@ -7,8 +7,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.IO;
 using UnityEngine;
-using sy;
-using ProtoBuf;
+using API;
 
 public class SocketServer
 {
@@ -25,6 +24,7 @@ public class SocketServer
     private const int PROTOCOL_HEAD_LENGTH_MASK = 0xFFFFFF;
     private const int PROTOCOL_HEAD_COMPRESS_MASK = 0x1000000;
     private static MemoryStream receiveStream = new MemoryStream();
+    private static int serialNumber = 0;
 
     public  void Start()
     {
@@ -130,32 +130,45 @@ public class SocketServer
                 {
                     int totalLen = reader.ReadInt32();
                     int messageLen = totalLen & PROTOCOL_HEAD_LENGTH_MASK;
-                    ushort mainId = reader.ReadUInt16();
+                    ushort msgId = reader.ReadUInt16();
                     UInt16 serialNumber = reader.ReadUInt16();
                     if ((int)(memStream.Length - memStream.Position) >= messageLen)
                     {
-                        Debug.Log("服务端收到请求：" +  mainId.ToString("X"));
+                        Debug.Log("服务端收到请求：" + msgId);
                         isFullMsg = true;
                         byte[] data = reader.ReadBytes(messageLen);
 
                         receiveStream.SetLength(0);
                         receiveStream.Write(data, 0, data.Length);
                         receiveStream.Position = 0;
-                        switch (mainId)
+                        ByteBuffer buffer;
+                        switch (msgId)
                         {
-                            case (ushort)MSG_CS.MSG_CS_REQUEST_LOGIN_C:
-                                MessageRequestLogin req = Serializer.Deserialize<MessageRequestLogin>(receiveStream);
-                                Debug.Log("Req login：" + req.account);
+                            case (ushort)MSG_CS.ReqLogin:
+                                MessageRequestLogin req = MessageRequestLogin.Parser.ParseFrom(receiveStream);
+                                Debug.Log("Req login：account: " + req.Account + " password:" + req.Password);
+
                                 MessageResponseLogin res = new MessageResponseLogin();
-                                res.token = "123456";
+                                res.PlayerId = 123;
+                                res.Token = req.Account + "666token";
                                 receiveStream.SetLength(0);
-                                Serializer.Serialize<MessageResponseLogin>(receiveStream, res);
-                                ByteBuffer buffer = createByteBuffer((ushort)MSG_CS.MSG_CS_RESPONSE_LOGIN_S, receiveStream);
+                                Google.Protobuf.MessageExtensions.WriteTo(res, receiveStream);
+                                buffer = createByteBuffer((ushort)MSG_CS.ResLogin, receiveStream);
+                                socketServer.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
+                                break;
+                            case (ushort)MSG_CS.ReqHeartBeat:
+                                MessageRequestHeartBeat heartReq = MessageRequestHeartBeat.Parser.ParseFrom(receiveStream);
+                                MessageResponseHeartBeat heartRes = new MessageResponseHeartBeat();
+                                heartRes.RealTime = heartReq.RealTime;
+                                heartRes.ServerTime = (ulong)DateTime.Now.Second;
+                                Google.Protobuf.MessageExtensions.WriteTo(heartRes, receiveStream);
+                                buffer = createByteBuffer((ushort)MSG_CS.ResHeartBeat, receiveStream);
                                 socketServer.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
                                 break;
                             default:
-                                Debug.LogError("服务端没有此协议：" + mainId);
+                                Debug.LogError("服务端没有此协议：" + msgId);
                                 break;
+
                         }
 
                     }
@@ -198,11 +211,12 @@ public class SocketServer
 
     private static ByteBuffer createByteBuffer(ushort msgId, MemoryStream stream)
     {
+        serialNumber++;
         ByteBuffer buffer = new ByteBuffer();
         buffer.setMsgId(msgId);
         buffer.WriteInt(stream != null ? (int)stream.Length : 0);
         buffer.WriteShort(msgId);
-        buffer.WriteShort(0);
+        buffer.WriteShort((ushort)serialNumber);
         if (stream != null)
         {
             buffer.WriteStream(stream);

@@ -3,9 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using ProtoBuf;
-using sy;
-
+using API;
 public class ReconnectState: BaseNetState
 {
     private float reConnectStartTime = 0;
@@ -27,7 +25,7 @@ public class ReconnectState: BaseNetState
 
         NetworkManager.GetInstance().addEvent(NET_EVENT.CONNECT_SUCC, handleConnectSucc);
         NetworkManager.GetInstance().addEvent(NET_EVENT.CONNECT_FAIL, handleConnectFail);
-        NetworkManager.GetInstance().AddHandle((int)MSG_CS.MSG_CS_REPORT_TOKEN_S, handleToken);
+        NetworkManager.GetInstance().AddHandle((int)MSG_CS.ResTokenCheck, handleToken);
 
         reConnectStartTime = Time.realtimeSinceStartup;
         NetworkManager.GetInstance().closeConnect();
@@ -90,9 +88,9 @@ public class ReconnectState: BaseNetState
             NetStateManager.GetInstance().changeNetState(NET_STATE.STATE_RELOGIN);
             return;
         }
-        MessageReportToken token = new MessageReportToken();
-        token.token = Singleton<GameModel>.GetInstance().Token.Trim();
-        NetworkManager.GetInstance().SendMessageSync<MessageReportToken>(MSG_CS.MSG_CS_REPORT_TOKEN_C, token);
+        MessageRequestToken token = new MessageRequestToken();
+        token.Token = Singleton<GameModel>.GetInstance().Token.Trim();
+        NetworkManager.GetInstance().SendMessageSync(MSG_CS.ReqTokenCheck, token);
         //这里还需要一个计时器，如果一定时间收不到token回复，则继续连接
         receiveTokenTimer = TimerManager.GetInstance().createTimer(5f, handleTokenFail);
     }
@@ -110,8 +108,8 @@ public class ReconnectState: BaseNetState
 
     void handleToken(MemoryStream ms)
     {
-        MessageReportTokenS response = Serializer.Deserialize<MessageReportTokenS>(ms);
-        if(0 == response.error_id)
+        MessageResponseToken response = MessageResponseToken.Parser.ParseFrom(ms);
+        if(response.ErrorId == 0)
         {
             //正常返回,进入运行状态
             NetStateManager.GetInstance().changeNetState(NET_STATE.STATE_RUN);
@@ -145,6 +143,6 @@ public class ReconnectState: BaseNetState
         
         NetworkManager.GetInstance().removeEvent(NET_EVENT.CONNECT_SUCC, handleConnectSucc);
         NetworkManager.GetInstance().removeEvent(NET_EVENT.CONNECT_FAIL, handleConnectFail);
-        NetworkManager.GetInstance().RemoveHandle((int)MSG_CS.MSG_CS_REPORT_TOKEN_S);
+        NetworkManager.GetInstance().RemoveHandle((int)MSG_CS.ResTokenCheck);
     }
 }

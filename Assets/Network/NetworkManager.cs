@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using ProtoBuf;
-using sy;
+using API;
+using Google.Protobuf;
 
 public class NetworkManager : EventDispatcher
 {
@@ -138,16 +138,23 @@ public class NetworkManager : EventDispatcher
         sendMsg((ushort)msgId, null);
     }
 
-    public void SendMessage<T>(MSG_CS msgId, T request)
+    public void test()
+    {
+        MessageRequestHeartBeat request = new MessageRequestHeartBeat();
+        request.RealTime = (ulong)(UnityEngine.Time.realtimeSinceStartup * 1000);
+        requestStream.SetLength(0);
+        MessageExtensions.WriteTo(request,requestStream);
+    }
+    public void SendMessage(MSG_CS msgId, IMessage request)
     {
         requestStream.SetLength(0);
-        Serializer.Serialize<T>(requestStream, request);
+        MessageExtensions.WriteTo(request, requestStream);
         sendMsg((ushort)msgId, requestStream);
     }
-    public void SendMessageSync<T>(MSG_CS msgId, T request)
+    public void SendMessageSync(MSG_CS msgId, IMessage request)
     {
         requestStream.SetLength(0);
-        Serializer.Serialize<T>(requestStream, request);
+        MessageExtensions.WriteTo(request, requestStream);
         ByteBuffer buffer = createByteBuffer((ushort)msgId, requestStream);
         client.WriteMessage(buffer.ToBytes());
         buffer.Close();

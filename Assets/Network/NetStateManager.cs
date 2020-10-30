@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using sy;
+using API;
 
 public class NetStateManager : Singleton<NetStateManager>
 {
@@ -70,7 +70,6 @@ public class NetStateManager : Singleton<NetStateManager>
     public void onReset()
     {
         loginState = LOGIN_STATE.STATE_NONE;
-        NetworkManager.GetInstance().AddHandle((int)MSG_CS.MSG_CS_NOTIFY_RELOGIN, handleRelogin);
     }
 }
 

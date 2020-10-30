@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ProtoBuf;
 
 public class Login : MonoBehaviour
 {
@@ -29,5 +28,6 @@ public class Login : MonoBehaviour
     public void ClickLogin()
     {
         InitService.GetInstance().onLoginRequst();
+        //NetworkManager.GetInstance().test();
     }
 }

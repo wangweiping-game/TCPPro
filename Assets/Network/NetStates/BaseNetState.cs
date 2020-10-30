@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Net.Sockets;
-using ProtoBuf;
-using sy;
+using API;
 
 public class BaseNetState:GameState
 {
@@ -70,7 +69,7 @@ public class BaseNetState:GameState
 
         NetworkManager.GetInstance().addEvent(NET_EVENT.HANDLE_START, handleMsgStart);
         //这个协议处理不需要remove
-        NetworkManager.GetInstance().AddHandle((int)MSG_CS.MSG_CS_RESPONSE_HEART_BEAT, handleHeartBeatResponse);
+        NetworkManager.GetInstance().AddHandle((int)MSG_CS.ResHeartBeat, handleHeartBeatResponse);
 
         heartBeatTimer = TimerManager.GetInstance().createTimer(10f, handleHeartBeat);
         heartBeatTimer.start();

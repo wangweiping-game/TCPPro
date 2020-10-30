@@ -128,14 +128,14 @@ public class SocketClient
         {
             int totalLen = reader.ReadInt32();
             int messageLen = totalLen & PROTOCOL_HEAD_LENGTH_MASK;            
-            ushort mainId = reader.ReadUInt16();
+            ushort msgId = reader.ReadUInt16();
             UInt16 serialNumber = reader.ReadUInt16();
             if (remainingByteLen() >= messageLen)
             {
                 isFullMsg = true;
                 byte[] data = reader.ReadBytes(messageLen);
 
-                Debug.Log("客户端收到协议："+ mainId.ToString("X"));
+                Debug.Log("客户端收到协议："+ msgId);
                 //断线重连协议号校验
                 if (NetworkManager.GetInstance().handledSerialNumber == UInt16.MaxValue)
                 {
@@ -143,12 +143,12 @@ public class SocketClient
                 }                    
 				if(0 == serialNumber || NetworkManager.GetInstance().handledSerialNumber < serialNumber)
                 {
-                    NetworkManager.GetInstance().pushMessage(mainId, data);
+                    NetworkManager.GetInstance().pushMessage(msgId, data);
                     NetworkManager.GetInstance().handledSerialNumber = serialNumber;                    
                 }
                 else
                 {
-                    Debug.LogError("服务器发送重复协议不处理：" + serialNumber + "::" + mainId.ToString("X"));
+                    Debug.LogError("服务器发送重复的协议：" + msgId +  " 序列号：" + serialNumber );
                 }
             }
             else
@@ -167,7 +167,8 @@ public class SocketClient
                 memStream.SetLength(0);
                 memStream.Write(leftover, 0, leftover.Length);
             }
-            else memStream.SetLength(0);
+            else 
+                memStream.SetLength(0);
         }
     }
 

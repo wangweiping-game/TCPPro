@@ -1,0 +1,14 @@
+# UnityProject
+Library
+Logs
+obj/Debug/*
+Temp
+
+# vistual studio
+*.csproj
+*.sln
+*.vs
+*.iml
+Assembly-CSharp*
+*.config
+
