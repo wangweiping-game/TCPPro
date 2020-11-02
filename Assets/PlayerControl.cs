@@ -50,7 +50,7 @@ public class PlayerControl : MonoBehaviour
                 obj = GameObject.Instantiate(obj);
                 obj.transform.parent = gameObject.transform.parent;
                 obj.name = item.PlayerId;
-                obj.transform.localScale = new Vector3(1, 1, 1);
+                obj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 obj.transform.localPosition = new Vector3(0, 0.5f, 0);
                 playerDic.Add(item.PlayerId, obj);
             }

@@ -65,6 +65,8 @@ public class SocketServer
     }
     void SyncOperationsPerFrame()
     {
+        if (playOptionsDic.Count <= 0)
+            return;
         operationsStream.SetLength(0);
         operationsStream.Position = 0;
         ByteBuffer buffer;
