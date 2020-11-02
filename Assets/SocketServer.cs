@@ -15,6 +15,7 @@ public class SocketServer
     static Socket socketwatch = null;
     //定义一个集合，存储客户端信息
     static Dictionary<string, Socket> clientConnectionItems = new Dictionary<string, Socket> { };
+    static Dictionary<string, Operation> playOptionsDic = new Dictionary<string, Operation> { };
     private static MemoryStream memStream;
     private static BinaryReader reader;
 
@@ -24,6 +25,7 @@ public class SocketServer
     private const int PROTOCOL_HEAD_LENGTH_MASK = 0xFFFFFF;
     private const int PROTOCOL_HEAD_COMPRESS_MASK = 0x1000000;
     private static MemoryStream receiveStream = new MemoryStream();
+    private static MemoryStream operationsStream = new MemoryStream();
     private static int serialNumber = 0;
 
     public  void Start()
@@ -57,7 +59,29 @@ public class SocketServer
 
         Debug.Log("*******服务器启动成功*******");
     }
-
+    public void Update()
+    {
+        SyncOperationsPerFrame();//帧同步
+    }
+    void SyncOperationsPerFrame()
+    {
+        operationsStream.SetLength(0);
+        operationsStream.Position = 0;
+        ByteBuffer buffer;
+        MessageNotifySyncOperations msg = new MessageNotifySyncOperations();
+        foreach (var item in playOptionsDic)
+        {
+            msg.PlayerOperations.Add(item.Value);
+        }
+        
+        Google.Protobuf.MessageExtensions.WriteTo(msg, operationsStream);
+        buffer = createByteBuffer((ushort)MSG_CS.NotifySyncOperations, operationsStream);
+        foreach (var client in clientConnectionItems)
+        {
+            client.Value.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
+        }
+        playOptionsDic.Clear();
+    }
     //监听客户端发来的请求  
     static void watchconnecting()
     {
@@ -89,7 +113,7 @@ public class SocketServer
             //客户端网络结点号  
             string remoteEndPoint = connection.RemoteEndPoint.ToString();
             //显示与客户端连接情况
-            Console.WriteLine("成功与" + remoteEndPoint + "客户端建立连接！\t\n");
+            Debug.Log("成功与" + remoteEndPoint + "客户端建立连接！");
             //添加客户端信息  
             clientConnectionItems.Add(remoteEndPoint, connection);
 
@@ -149,7 +173,7 @@ public class SocketServer
                                 Debug.Log("Req login：account: " + req.Account + " password:" + req.Password);
 
                                 MessageResponseLogin res = new MessageResponseLogin();
-                                res.PlayerId = 123;
+                                res.PlayerId = req.Account;
                                 res.Token = req.Account + "666token";
                                 receiveStream.SetLength(0);
                                 Google.Protobuf.MessageExtensions.WriteTo(res, receiveStream);
@@ -164,6 +188,19 @@ public class SocketServer
                                 Google.Protobuf.MessageExtensions.WriteTo(heartRes, receiveStream);
                                 buffer = createByteBuffer((ushort)MSG_CS.ResHeartBeat, receiveStream);
                                 socketServer.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
+                                break;
+                            case (ushort)MSG_CS.NotifyClientOperations:
+                                MessageNotifyClientOperations ope = MessageNotifyClientOperations.Parser.ParseFrom(receiveStream);
+                                Debug.Log("Notify Client Operation ");
+                                if(playOptionsDic.ContainsKey(ope.PlayerOperation.PlayerId))
+                                {
+
+                                    playOptionsDic[ope.PlayerOperation.PlayerId] = ope.PlayerOperation;
+                                }
+                                else
+                                {
+                                    playOptionsDic.Add(ope.PlayerOperation.PlayerId, ope.PlayerOperation);
+                                }
                                 break;
                             default:
                                 Debug.LogError("服务端没有此协议：" + msgId);

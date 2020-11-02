@@ -138,13 +138,6 @@ public class NetworkManager : EventDispatcher
         sendMsg((ushort)msgId, null);
     }
 
-    public void test()
-    {
-        MessageRequestHeartBeat request = new MessageRequestHeartBeat();
-        request.RealTime = (ulong)(UnityEngine.Time.realtimeSinceStartup * 1000);
-        requestStream.SetLength(0);
-        MessageExtensions.WriteTo(request,requestStream);
-    }
     public void SendMessage(MSG_CS msgId, IMessage request)
     {
         requestStream.SetLength(0);
