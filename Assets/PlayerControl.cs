@@ -51,7 +51,7 @@ public class PlayerControl : MonoBehaviour
                 obj.transform.parent = gameObject.transform.parent;
                 obj.name = item.PlayerId;
                 obj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-                obj.transform.localPosition = new Vector3(0, 0.5f, 0);
+                obj.transform.localPosition = new Vector3(0, 0.05f, 0);
                 playerDic.Add(item.PlayerId, obj);
             }
             playerDic[item.PlayerId].transform.Translate(new Vector3(item.XOffset, 0, item.ZOffset));
