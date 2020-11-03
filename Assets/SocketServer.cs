@@ -27,7 +27,7 @@ public class SocketServer
     private static MemoryStream receiveStream = new MemoryStream();
     private static MemoryStream operationsStream = new MemoryStream();
     private static int serialNumber = 0;
-
+    
     public  void Start()
     {
         byteBuffer = new byte[MAX_READ];
@@ -65,24 +65,28 @@ public class SocketServer
     }
     void SyncOperationsPerFrame()
     {
-        if (playOptionsDic.Count <= 0)
-            return;
-        operationsStream.SetLength(0);
-        operationsStream.Position = 0;
-        ByteBuffer buffer;
-        MessageNotifySyncOperations msg = new MessageNotifySyncOperations();
-        foreach (var item in playOptionsDic)
+        //if (playOptionsDic.Count <= 0)
+        //    return;
+        lock (playOptionsDic)
         {
-            msg.PlayerOperations.Add(item.Value);
+            operationsStream.SetLength(0);
+            operationsStream.Position = 0;
+            ByteBuffer buffer;
+            MessageNotifySyncOperations msg = new MessageNotifySyncOperations();
+            foreach (var item in playOptionsDic)
+            {
+                msg.PlayerOperations.Add(item.Value);
+            }
+
+            Google.Protobuf.MessageExtensions.WriteTo(msg, operationsStream);
+            buffer = createByteBuffer((ushort)MSG_CS.NotifySyncOperations, operationsStream);
+            foreach (var client in clientConnectionItems)
+            {
+                client.Value.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
+            }
+            playOptionsDic.Clear();
         }
         
-        Google.Protobuf.MessageExtensions.WriteTo(msg, operationsStream);
-        buffer = createByteBuffer((ushort)MSG_CS.NotifySyncOperations, operationsStream);
-        foreach (var client in clientConnectionItems)
-        {
-            client.Value.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
-        }
-        playOptionsDic.Clear();
     }
     //监听客户端发来的请求  
     static void watchconnecting()
@@ -142,6 +146,7 @@ public class SocketServer
 
         while (true)
         {
+            //System.Threading.Thread.Sleep(200/*new System.Random().Next(200)*/);
             //将接收到的信息存入到内存缓冲区，并返回其字节数组的长度    
             try
             {
@@ -192,18 +197,22 @@ public class SocketServer
                                 socketServer.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
                                 break;
                             case (ushort)MSG_CS.NotifyClientOperations:
-                                MessageNotifyClientOperations ope = MessageNotifyClientOperations.Parser.ParseFrom(receiveStream);
-                                Debug.Log("Notify Client Operation ");
-                                if(playOptionsDic.ContainsKey(ope.PlayerOperation.PlayerId))
+                                lock (playOptionsDic)
                                 {
+                                    MessageNotifyClientOperations ope = MessageNotifyClientOperations.Parser.ParseFrom(receiveStream);
+                                    Debug.Log("Notify Client Operation ");
+                                    if (playOptionsDic.ContainsKey(ope.PlayerOperation.PlayerId))
+                                    {
 
-                                    playOptionsDic[ope.PlayerOperation.PlayerId] = ope.PlayerOperation;
+                                        playOptionsDic[ope.PlayerOperation.PlayerId] = ope.PlayerOperation;
+                                    }
+                                    else
+                                    {
+                                        playOptionsDic.Add(ope.PlayerOperation.PlayerId, ope.PlayerOperation);
+                                    }
+                                    break;
                                 }
-                                else
-                                {
-                                    playOptionsDic.Add(ope.PlayerOperation.PlayerId, ope.PlayerOperation);
-                                }
-                                break;
+                                    
                             default:
                                 Debug.LogError("服务端没有此协议：" + msgId);
                                 break;

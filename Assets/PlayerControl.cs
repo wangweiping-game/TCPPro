@@ -21,8 +21,8 @@ public class PlayerControl : MonoBehaviour
     {
         float MoveH = Input.GetAxis("Horizontal");
         float MoveV = Input.GetAxis("Vertical");
-        opetion.XOffset += MoveH * Time.deltaTime * 10;
-        opetion.ZOffset += MoveV * Time.deltaTime * 10;
+        opetion.XOffset += MoveH * Time.deltaTime * 100;
+        opetion.ZOffset += MoveV * Time.deltaTime * 100;
         sendOffsetToServer();
     }
 
