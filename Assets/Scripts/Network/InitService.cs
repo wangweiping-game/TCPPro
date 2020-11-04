@@ -15,17 +15,32 @@ public class InitService :Singleton<InitService>
     void init()
     {
         NetworkManager.GetInstance().AddHandle((int)MSG_CS.ResLogin, onLoginResponse);
+        NetworkManager.GetInstance().AddHandle((int)MSG_CS.NotifySyncOperations, NotifySynOperations);
     }
-
-    public void NotifyClientOperations(float xOffset, float zOffset)
+    //客户端发送指令
+    public void NotifyClientOperations(Command type,string param)
     {
         MessageNotifyClientOperations msg = new MessageNotifyClientOperations();
         Operation info = new Operation();
-        info.PlayerId = Singleton<GameModel>.GetInstance().PlayerID;
-        info.XOffset = xOffset;
-        info.ZOffset = zOffset;
+        info.CommandType = type;
+        info.Data = Singleton<GameModel>.GetInstance().PlayerID + "_" +param;
         msg.PlayerOperation = info;
         NetworkManager.GetInstance().SendMessage(MSG_CS.NotifyClientOperations, msg);
+    }
+    /// <summary>
+    /// 服务端下发帧同步命令集
+    /// </summary>
+    /// <param name="stream"></param>
+    public void NotifySynOperations(MemoryStream stream)
+    {
+        Debug.Log("服务端下发帧同步命令集");
+        MessageNotifySyncOperations res = MessageNotifySyncOperations.Parser.ParseFrom(stream);
+        if(res.PlayerOperations.Count > 0)
+        {
+            List<Operation> opes = new List<Operation>(res.PlayerOperations);
+            CommandManager.GetInstance().doCommand(opes);
+        }
+
     }
     /// <summary>
     /// 发送心跳

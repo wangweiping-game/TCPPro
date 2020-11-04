@@ -31,28 +31,29 @@ namespace API {
             "b3JkGAIgASgJIjcKFE1lc3NhZ2VSZXNwb25zZUxvZ2luEhAKCHBsYXllcklk",
             "GAEgASgJEg0KBXRva2VuGAIgASgJIjUKE01lc3NhZ2VSZXF1ZXN0VG9rZW4S",
             "DwoHYWNjb3VudBgBIAEoCRINCgV0b2tlbhgCIAEoCSIoChRNZXNzYWdlUmVz",
-            "cG9uc2VUb2tlbhIQCghlcnJvcl9pZBgBIAEoBSI/CglPcGVyYXRpb24SEAoI",
-            "cGxheWVySWQYASABKAkSDwoHeE9mZnNldBgCIAEoAhIPCgd6T2Zmc2V0GAMg",
-            "ASgCIkcKG01lc3NhZ2VOb3RpZnlTeW5jT3BlcmF0aW9ucxIoChBwbGF5ZXJP",
-            "cGVyYXRpb25zGAEgAygLMg4uQVBJLk9wZXJhdGlvbiJICh1NZXNzYWdlTm90",
-            "aWZ5Q2xpZW50T3BlcmF0aW9ucxInCg9wbGF5ZXJPcGVyYXRpb24YASABKAsy",
-            "Di5BUEkuT3BlcmF0aW9uKoMCCgZNU0dfQ1MSDwoLTVNHX0NTX05PTkUQABIa",
-            "ChVNU0dfQ1NfUkVRX0hFQVJUX0JFQVQQ6AcSGgoVTVNHX0NTX1JFU19IRUFS",
-            "VF9CRUFUEOkHEhUKEE1TR19DU19SRVFfTE9HSU4Q6gcSFQoQTVNHX0NTX1JF",
-            "U19MT0dJThDrBxIbChZNU0dfQ1NfUkVRX1RPS0VOX0NIRUNLEOwHEhsKFk1T",
-            "R19DU19SRVNfVE9LRU5fQ0hFQ0sQ7QcSJAofTVNHX0NTX05PVElGWV9DTElF",
-            "TlRfT1BFUkFUSU9OUxDuBxIiCh1NU0dfQ1NfTk9USUZZX1NZTkNfT1BFUkFU",
-            "SU9OUxDvB2IGcHJvdG8z"));
+            "cG9uc2VUb2tlbhIQCghlcnJvcl9pZBgBIAEoBSI8CglPcGVyYXRpb24SIQoL",
+            "Y29tbWFuZFR5cGUYASABKA4yDC5BUEkuQ29tbWFuZBIMCgRkYXRhGAMgASgJ",
+            "IkcKG01lc3NhZ2VOb3RpZnlTeW5jT3BlcmF0aW9ucxIoChBwbGF5ZXJPcGVy",
+            "YXRpb25zGAEgAygLMg4uQVBJLk9wZXJhdGlvbiJICh1NZXNzYWdlTm90aWZ5",
+            "Q2xpZW50T3BlcmF0aW9ucxInCg9wbGF5ZXJPcGVyYXRpb24YASABKAsyDi5B",
+            "UEkuT3BlcmF0aW9uKoMCCgZNU0dfQ1MSDwoLTVNHX0NTX05PTkUQABIaChVN",
+            "U0dfQ1NfUkVRX0hFQVJUX0JFQVQQ6AcSGgoVTVNHX0NTX1JFU19IRUFSVF9C",
+            "RUFUEOkHEhUKEE1TR19DU19SRVFfTE9HSU4Q6gcSFQoQTVNHX0NTX1JFU19M",
+            "T0dJThDrBxIbChZNU0dfQ1NfUkVRX1RPS0VOX0NIRUNLEOwHEhsKFk1TR19D",
+            "U19SRVNfVE9LRU5fQ0hFQ0sQ7QcSJAofTVNHX0NTX05PVElGWV9DTElFTlRf",
+            "T1BFUkFUSU9OUxDuBxIiCh1NU0dfQ1NfTk9USUZZX1NZTkNfT1BFUkFUSU9O",
+            "UxDvBypACgdDb21tYW5kEhAKDENvbW1hbmRfTm9uZRAAEhAKDENvbW1hbmRf",
+            "TW92ZRABEhEKDUNvbW1hbmRfU2hvb3QQAmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::API.MSG_CS), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::API.MSG_CS), typeof(global::API.Command), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageRequestHeartBeat), global::API.MessageRequestHeartBeat.Parser, new[]{ "RealTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageResponseHeartBeat), global::API.MessageResponseHeartBeat.Parser, new[]{ "RealTime", "ServerTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageRequestLogin), global::API.MessageRequestLogin.Parser, new[]{ "Account", "Password" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageResponseLogin), global::API.MessageResponseLogin.Parser, new[]{ "PlayerId", "Token" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageRequestToken), global::API.MessageRequestToken.Parser, new[]{ "Account", "Token" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageResponseToken), global::API.MessageResponseToken.Parser, new[]{ "ErrorId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::API.Operation), global::API.Operation.Parser, new[]{ "PlayerId", "XOffset", "ZOffset" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::API.Operation), global::API.Operation.Parser, new[]{ "CommandType", "Data" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageNotifySyncOperations), global::API.MessageNotifySyncOperations.Parser, new[]{ "PlayerOperations" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageNotifyClientOperations), global::API.MessageNotifyClientOperations.Parser, new[]{ "PlayerOperation" }, null, null, null, null)
           }));
@@ -77,6 +78,12 @@ namespace API {
     ///服务器同步所有客户端
     /// </summary>
     [pbr::OriginalName("MSG_CS_NOTIFY_SYNC_OPERATIONS")] NotifySyncOperations = 1007,
+  }
+
+  public enum Command {
+    [pbr::OriginalName("Command_None")] None = 0,
+    [pbr::OriginalName("Command_Move")] Move = 1,
+    [pbr::OriginalName("Command_Shoot")] Shoot = 2,
   }
 
   #endregion
@@ -1287,9 +1294,8 @@ namespace API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public Operation(Operation other) : this() {
-      playerId_ = other.playerId_;
-      xOffset_ = other.xOffset_;
-      zOffset_ = other.zOffset_;
+      commandType_ = other.commandType_;
+      data_ = other.data_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1298,36 +1304,25 @@ namespace API {
       return new Operation(this);
     }
 
-    /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private string playerId_ = "";
+    /// <summary>Field number for the "commandType" field.</summary>
+    public const int CommandTypeFieldNumber = 1;
+    private global::API.Command commandType_ = global::API.Command.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string PlayerId {
-      get { return playerId_; }
+    public global::API.Command CommandType {
+      get { return commandType_; }
       set {
-        playerId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        commandType_ = value;
       }
     }
 
-    /// <summary>Field number for the "xOffset" field.</summary>
-    public const int XOffsetFieldNumber = 2;
-    private float xOffset_;
+    /// <summary>Field number for the "data" field.</summary>
+    public const int DataFieldNumber = 3;
+    private string data_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public float XOffset {
-      get { return xOffset_; }
+    public string Data {
+      get { return data_; }
       set {
-        xOffset_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "zOffset" field.</summary>
-    public const int ZOffsetFieldNumber = 3;
-    private float zOffset_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public float ZOffset {
-      get { return zOffset_; }
-      set {
-        zOffset_ = value;
+        data_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -1344,18 +1339,16 @@ namespace API {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerId != other.PlayerId) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(XOffset, other.XOffset)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ZOffset, other.ZOffset)) return false;
+      if (CommandType != other.CommandType) return false;
+      if (Data != other.Data) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
-      if (XOffset != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(XOffset);
-      if (ZOffset != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ZOffset);
+      if (CommandType != global::API.Command.None) hash ^= CommandType.GetHashCode();
+      if (Data.Length != 0) hash ^= Data.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1372,17 +1365,13 @@ namespace API {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(PlayerId);
+      if (CommandType != global::API.Command.None) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) CommandType);
       }
-      if (XOffset != 0F) {
-        output.WriteRawTag(21);
-        output.WriteFloat(XOffset);
-      }
-      if (ZOffset != 0F) {
-        output.WriteRawTag(29);
-        output.WriteFloat(ZOffset);
+      if (Data.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Data);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1393,17 +1382,13 @@ namespace API {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(PlayerId);
+      if (CommandType != global::API.Command.None) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) CommandType);
       }
-      if (XOffset != 0F) {
-        output.WriteRawTag(21);
-        output.WriteFloat(XOffset);
-      }
-      if (ZOffset != 0F) {
-        output.WriteRawTag(29);
-        output.WriteFloat(ZOffset);
+      if (Data.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Data);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -1414,14 +1399,11 @@ namespace API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerId);
+      if (CommandType != global::API.Command.None) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) CommandType);
       }
-      if (XOffset != 0F) {
-        size += 1 + 4;
-      }
-      if (ZOffset != 0F) {
-        size += 1 + 4;
+      if (Data.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Data);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1434,14 +1416,11 @@ namespace API {
       if (other == null) {
         return;
       }
-      if (other.PlayerId.Length != 0) {
-        PlayerId = other.PlayerId;
+      if (other.CommandType != global::API.Command.None) {
+        CommandType = other.CommandType;
       }
-      if (other.XOffset != 0F) {
-        XOffset = other.XOffset;
-      }
-      if (other.ZOffset != 0F) {
-        ZOffset = other.ZOffset;
+      if (other.Data.Length != 0) {
+        Data = other.Data;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1457,16 +1436,12 @@ namespace API {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            PlayerId = input.ReadString();
+          case 8: {
+            CommandType = (global::API.Command) input.ReadEnum();
             break;
           }
-          case 21: {
-            XOffset = input.ReadFloat();
-            break;
-          }
-          case 29: {
-            ZOffset = input.ReadFloat();
+          case 26: {
+            Data = input.ReadString();
             break;
           }
         }
@@ -1483,16 +1458,12 @@ namespace API {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            PlayerId = input.ReadString();
+          case 8: {
+            CommandType = (global::API.Command) input.ReadEnum();
             break;
           }
-          case 21: {
-            XOffset = input.ReadFloat();
-            break;
-          }
-          case 29: {
-            ZOffset = input.ReadFloat();
+          case 26: {
+            Data = input.ReadString();
             break;
           }
         }

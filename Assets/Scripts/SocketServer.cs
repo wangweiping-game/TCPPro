@@ -15,7 +15,7 @@ public class SocketServer
     static Socket socketwatch = null;
     //定义一个集合，存储客户端信息
     static Dictionary<string, Socket> clientConnectionItems = new Dictionary<string, Socket> { };
-    static Dictionary<string, Operation> playOptionsDic = new Dictionary<string, Operation> { };
+    static List<Operation> OperationsList = new List<Operation> ();
     private static MemoryStream memStream;
     private static BinaryReader reader;
 
@@ -65,26 +65,21 @@ public class SocketServer
     }
     void SyncOperationsPerFrame()
     {
-        //if (playOptionsDic.Count <= 0)
-        //    return;
-        lock (playOptionsDic)
+        lock (OperationsList)
         {
             operationsStream.SetLength(0);
             operationsStream.Position = 0;
             ByteBuffer buffer;
             MessageNotifySyncOperations msg = new MessageNotifySyncOperations();
-            foreach (var item in playOptionsDic)
-            {
-                msg.PlayerOperations.Add(item.Value);
-            }
-
+            if (OperationsList.Count > 0)
+                msg.PlayerOperations.AddRange(OperationsList);
             Google.Protobuf.MessageExtensions.WriteTo(msg, operationsStream);
             buffer = createByteBuffer((ushort)MSG_CS.NotifySyncOperations, operationsStream);
             foreach (var client in clientConnectionItems)
             {
                 client.Value.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
             }
-            playOptionsDic.Clear();
+            OperationsList.Clear();
         }
         
     }
@@ -197,19 +192,11 @@ public class SocketServer
                                 socketServer.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
                                 break;
                             case (ushort)MSG_CS.NotifyClientOperations:
-                                lock (playOptionsDic)
+                                lock (OperationsList)
                                 {
                                     MessageNotifyClientOperations ope = MessageNotifyClientOperations.Parser.ParseFrom(receiveStream);
                                     Debug.Log("Notify Client Operation ");
-                                    if (playOptionsDic.ContainsKey(ope.PlayerOperation.PlayerId))
-                                    {
-
-                                        playOptionsDic[ope.PlayerOperation.PlayerId] = ope.PlayerOperation;
-                                    }
-                                    else
-                                    {
-                                        playOptionsDic.Add(ope.PlayerOperation.PlayerId, ope.PlayerOperation);
-                                    }
+                                    OperationsList.Add(ope.PlayerOperation);
                                     break;
                                 }
                                     

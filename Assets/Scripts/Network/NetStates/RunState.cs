@@ -15,7 +15,7 @@ public class RunState: BaseNetState
     {
         Debug.Log("*********进入运行状态*********");
         NetworkManager.GetInstance().addEvent(NET_EVENT.CONNECT_FAIL, handleConnectFail);
-        startHeartBeat();
+        //startHeartBeat();
     }
 
     protected override void handleConnectFail(EventObject e)

@@ -135,7 +135,7 @@ public class SocketClient
                 isFullMsg = true;
                 byte[] data = reader.ReadBytes(messageLen);
 
-                Debug.Log("客户端收到协议："+ msgId);
+                //Debug.Log("客户端收到协议："+ msgId);
                 //断线重连协议号校验
                 if (NetworkManager.GetInstance().handledSerialNumber == UInt16.MaxValue)
                 {
