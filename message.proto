@@ -1,0 +1,70 @@
+syntax = "proto3"; 
+package API;
+
+enum MSG_CS
+{
+	MSG_CS_NONE = 0;
+	MSG_CS_REQ_HEART_BEAT = 1000;
+	MSG_CS_RES_HEART_BEAT = 1001;
+	MSG_CS_REQ_LOGIN = 1002;
+	MSG_CS_RES_LOGIN = 1003;
+	MSG_CS_REQ_TOKEN_CHECK = 1004;
+	MSG_CS_RES_TOKEN_CHECK = 1005;
+	MSG_CS_NOTIFY_CLIENT_OPERATIONS = 1006; //客户端发送操作指令
+	MSG_CS_NOTIFY_SYNC_OPERATIONS = 1007; //服务器同步所有客户端
+	MSG_CS_NOTIFY_ROOM_INFO = 1008;
+}
+enum Command
+{	
+	Command_None = 0;
+	Command_Move = 1;
+	Command_Shoot = 2;
+}
+
+message MessageRequestHeartBeat
+{
+	uint64 realTime = 1;
+}
+message MessageResponseHeartBeat
+{
+	uint64 realTime = 1;
+	uint64 serverTime = 2;
+}
+message MessageRequestLogin
+{
+	string account = 1; 
+	string password = 2;
+}
+message MessageResponseLogin
+{
+	string playerId = 1;
+	string token = 2;
+}
+
+message MessageRequestToken
+{
+	string account = 1;
+	string token = 2;
+}
+message MessageResponseToken
+{
+	int32 error_id = 1;
+}
+message Operation
+{
+	Command  commandType = 1;
+	string data = 3;
+}
+message MessageNotifySyncOperations
+{
+	repeated Operation playerOperations = 1;
+}
+message MessageNotifyClientOperations
+{
+	Operation playerOperation = 1;
+}
+message MessageNotifyRoomInfo
+{
+	int32 playerCount = 1;
+	int32 FightState = 2;
+}
