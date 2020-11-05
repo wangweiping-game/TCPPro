@@ -63,6 +63,7 @@ public class LoginFrame : MonoBehaviour
             Debug.Log(webRequest.error);
         else
         {
+            Debug.Log(webRequest.downloadHandler.text);
             analyDownLoadText(url,webRequest.downloadHandler.text);
         }
     }

@@ -18,7 +18,7 @@ public class SocketServer :Singleton<SocketServer>
     static List<Operation> OperationsList = new List<Operation> ();
     private static MemoryStream memStream;
     private static BinaryReader reader;
-    private static int maxSocketNum = 1;
+    private static int maxSocketNum = 3;
 
     private const int MAX_READ = 8192;
     private static byte[] byteBuffer;
