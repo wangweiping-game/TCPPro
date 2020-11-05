@@ -22,7 +22,7 @@ public class BaseNetState:GameState
 
     protected void startConnect()
     {
-        NetworkManager.GetInstance().startConnect("127.0.0.1", 1234);
+        NetworkManager.GetInstance().startConnect(GameModel.roomServerIp, 1234);
     }
 
     protected virtual void handleConnectFail(EventObject e)

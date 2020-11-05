@@ -3,29 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class LoginFrame : MonoBehaviour
 {
     public InputField input_account;
     public InputField input_password;
-
-
-    bool startServer = false;
+    public Animator promptAni;
+    public Text promptText;
+    public GameObject WaitFrame;
+    public Text playerNumText;
 
     private void Start()
     {
+        NetworkManager.GetInstance().AddHandle((int)MSG_CS.NotifyRoomInfo, UpdateRoomInfo);
     }
     public void ClickStartServer()
     {
-        Singleton<SocketServer>.GetInstance().Start();
-        startServer = true;
+        SocketServer.GetInstance().Start();
     }
 
     public void Update()
     {
-        if(startServer)
-            Singleton<SocketServer>.GetInstance().Update();
     }
     public void ClickStartConnectServer()
     {
@@ -43,5 +43,90 @@ public class LoginFrame : MonoBehaviour
         InitService.GetInstance().onLoginRequst( input_account.text);
     }
   
+    public void onClickCreateRoomBtn()
+    {
 
+        StartCoroutine(createRoom("create"));
+    }
+
+    public void onClickJoinRoomBtn()
+    {
+        StartCoroutine(createRoom("get"));
+    }
+
+    IEnumerator createRoom(string url)
+    {
+        UnityWebRequest webRequest = UnityWebRequest.Get(GameModel.serverUrl + url);
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.isHttpError || webRequest.isNetworkError)
+            Debug.Log(webRequest.error);
+        else
+        {
+            analyDownLoadText(url,webRequest.downloadHandler.text);
+        }
+    }
+    void analyDownLoadText(string url,string str)
+    {
+        Dictionary<string, object> configDic = AGMiniJSON.Json.Deserialize(str) as Dictionary<string, object>;
+        if (!configDic.ContainsKey("code"))
+        {
+            showPrompt("服务端下发数据错误！");
+            return;
+        }
+        int code = int.Parse(configDic["code"].ToString());
+        if (code != 0)
+        {
+            showPrompt(configDic["msg"].ToString());
+            return;
+        }
+        switch (url)
+        {
+            case "get":
+                GameModel.roomServerIp = configDic["val"].ToString();
+                StartCoroutine(joinRoomCallBack());
+                break;
+            case "create":
+                GameModel.roomServerIp ="127.0.0.1";
+                StartCoroutine(createRoomCallBack());
+                break;
+            default:
+                Debug.LogError("未处理！");
+                break;
+
+        }
+    }
+    IEnumerator createRoomCallBack()
+    {
+        SocketServer.GetInstance().Start();
+        showPrompt("房间创建成功，请等待其他玩家的加入！");
+        yield return new WaitForSeconds(0.5f);
+        NetStateManager.GetInstance().startConnect();
+        yield return new WaitForSeconds(0.5f);
+
+        WaitFrame.SetActive(true);
+    }
+    IEnumerator joinRoomCallBack()
+    {
+        showPrompt("成功加入房间！");
+        NetStateManager.GetInstance().startConnect();
+        yield return new WaitForSeconds(2);
+        WaitFrame.SetActive(true);
+    }
+    public void showPrompt(string msg)
+    {
+        promptAni.enabled = true;
+        promptAni.Play("PromptAnimation",0,0f);
+        promptText.text = msg;
+    }
+
+    void UpdateRoomInfo(MemoryStream ms)
+    {
+        MessageNotifyRoomInfo info = MessageNotifyRoomInfo.Parser.ParseFrom(ms);
+        playerNumText.text = info.PlayerCount.ToString();
+        if(info.FightState == 1)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Play");
+        }
+    }
 }

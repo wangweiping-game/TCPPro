@@ -14,7 +14,10 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(GameModel.serverStartFlag)
+        {
+            SocketServer.GetInstance().Update();
+        }
     }
 
     private void LateUpdate()

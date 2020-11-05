@@ -48,6 +48,7 @@ public class SocketClient
     // 连接服务器回调   
     void OnConnect(IAsyncResult asr)
     {
+        Debug.Log("连接服务器回调");
         Socket sk = (Socket)asr.AsyncState;
         if (sk != client) 
             return;
@@ -141,15 +142,15 @@ public class SocketClient
                 {
                     NetworkManager.GetInstance().onClearSerialNumber();
                 }                    
-				if(0 == serialNumber || NetworkManager.GetInstance().handledSerialNumber < serialNumber)
+				//if(0 == serialNumber || NetworkManager.GetInstance().handledSerialNumber < serialNumber)
                 {
                     NetworkManager.GetInstance().pushMessage(msgId, data);
                     NetworkManager.GetInstance().handledSerialNumber = serialNumber;                    
                 }
-                else
-                {
-                    Debug.LogError("服务器发送重复的协议：" + msgId +  " 序列号：" + serialNumber );
-                }
+                //else
+                //{
+                //    Debug.LogError("服务器发送重复的协议：" + msgId +  " 序列号：" + serialNumber );
+                //}
             }
             else
             {

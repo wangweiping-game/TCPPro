@@ -23,7 +23,7 @@ public class InitService :Singleton<InitService>
         MessageNotifyClientOperations msg = new MessageNotifyClientOperations();
         Operation info = new Operation();
         info.CommandType = type;
-        info.Data = Singleton<GameModel>.GetInstance().PlayerID + "_" +param;
+        info.Data = param;
         msg.PlayerOperation = info;
         NetworkManager.GetInstance().SendMessage(MSG_CS.NotifyClientOperations, msg);
     }
@@ -33,7 +33,6 @@ public class InitService :Singleton<InitService>
     /// <param name="stream"></param>
     public void NotifySynOperations(MemoryStream stream)
     {
-        Debug.Log("服务端下发帧同步命令集");
         MessageNotifySyncOperations res = MessageNotifySyncOperations.Parser.ParseFrom(stream);
         if(res.PlayerOperations.Count > 0)
         {

@@ -9,7 +9,7 @@ using System.IO;
 using UnityEngine;
 using API;
 
-public class SocketServer
+public class SocketServer :Singleton<SocketServer>
 {
     // 创建一个和客户端通信的套接字
     static Socket socketwatch = null;
@@ -18,6 +18,7 @@ public class SocketServer
     static List<Operation> OperationsList = new List<Operation> ();
     private static MemoryStream memStream;
     private static BinaryReader reader;
+    private static int maxSocketNum = 1;
 
     private const int MAX_READ = 8192;
     private static byte[] byteBuffer;
@@ -27,7 +28,8 @@ public class SocketServer
     private static MemoryStream receiveStream = new MemoryStream();
     private static MemoryStream operationsStream = new MemoryStream();
     private static int serialNumber = 0;
-    
+    private Timer roomInfoTimer;
+    private static bool notifyRoomInfoFlag = false;
     public  void Start()
     {
         byteBuffer = new byte[MAX_READ];
@@ -56,7 +58,10 @@ public class SocketServer
 
         //启动线程     
         threadwatch.Start();
+        GameModel.serverStartFlag = true;
 
+        roomInfoTimer = TimerManager.GetInstance().createTimer(0.1f, NotifyRoomInfo);
+        roomInfoTimer.start();
         Debug.Log("*******服务器启动成功*******");
     }
     public void Update()
@@ -83,9 +88,37 @@ public class SocketServer
         }
         
     }
+    static void NotifyRoomInfo()
+    {
+        if (notifyRoomInfoFlag)
+            return;
+        MessageNotifyRoomInfo msg = new MessageNotifyRoomInfo();
+        msg.PlayerCount = clientConnectionItems.Count;
+        //0：等待 1:开战中 
+        if (clientConnectionItems.Count >= maxSocketNum)
+        {
+            msg.FightState = 1;
+            notifyRoomInfoFlag = true;
+        }
+        else
+            msg.FightState = 0;
+        MemoryStream memory = new MemoryStream();
+        Google.Protobuf.MessageExtensions.WriteTo(msg, memory);
+        ByteBuffer buffer = createByteBuffer((ushort)MSG_CS.NotifyRoomInfo, memory);
+        foreach (var client in clientConnectionItems)
+        {
+            client.Value.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
+        }
+    }
     //监听客户端发来的请求  
     static void watchconnecting()
     {
+        if (clientConnectionItems.Count >= maxSocketNum)
+        {
+            Debug.Log("房间人数达到上限");
+            return;
+        }
+
         Socket connection = null;
 
         //持续不断监听客户端发来的请求     
@@ -160,7 +193,7 @@ public class SocketServer
                     UInt16 serialNumber = reader.ReadUInt16();
                     if ((int)(memStream.Length - memStream.Position) >= messageLen)
                     {
-                        Debug.Log("服务端收到请求：" + msgId);
+                        //Debug.Log("服务端收到请求：" + msgId);
                         isFullMsg = true;
                         byte[] data = reader.ReadBytes(messageLen);
 
@@ -195,7 +228,6 @@ public class SocketServer
                                 lock (OperationsList)
                                 {
                                     MessageNotifyClientOperations ope = MessageNotifyClientOperations.Parser.ParseFrom(receiveStream);
-                                    Debug.Log("Notify Client Operation ");
                                     OperationsList.Add(ope.PlayerOperation);
                                     break;
                                 }

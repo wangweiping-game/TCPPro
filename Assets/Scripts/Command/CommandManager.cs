@@ -16,7 +16,6 @@ public class CommandManager :Singleton<CommandManager>
     {
         for (int i = 0; i < ope.Count; i++)
         {
-            Debug.Log("command :" + ope[i].CommandType.ToString());
             if(commandsDic.ContainsKey(ope[i].CommandType))
             {
                 commandsDic[ope[i].CommandType].excute(ope[i].Data);

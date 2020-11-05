@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     Dictionary<string, GameObject> playerDic = new Dictionary<string, GameObject>();
-    float xOffset = 0, zOffset = 0;
+    float xOffset = 10, zOffset = 20;
 
     Operation opetion = new Operation();
 
@@ -21,14 +21,14 @@ public class PlayerControl : MonoBehaviour
 
     void Update()
     {
-        float MoveH = Input.GetAxis("Horizontal");
-        float MoveV = Input.GetAxis("Vertical");
-        xOffset += MoveH * Time.deltaTime * 100;
-        zOffset += MoveV * Time.deltaTime * 100;
-        sendOffsetToServer();
+        //float MoveH = Input.GetAxis("Horizontal");
+        //float MoveV = Input.GetAxis("Vertical");
+        //xOffset += MoveH * Time.deltaTime * 100;
+        //zOffset += MoveV * Time.deltaTime * 100;
+        //sendOffsetToServer();
     }
 
-    void sendOffsetToServer()
+    public void sendOffsetToServer()
     {
         if (xOffset != 0 || zOffset != 0)
         {
@@ -38,8 +38,10 @@ public class PlayerControl : MonoBehaviour
     }
     void resetOffset()
     {
-        xOffset = 0;
-        zOffset = 0;
+        //xOffset = 0;
+        //zOffset = 0;
+        xOffset++;
+        zOffset++;
     }
     public void NotifySynOperations(MemoryStream stream)
     {
