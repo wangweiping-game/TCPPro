@@ -18,7 +18,7 @@ public class SocketServer :Singleton<SocketServer>
     static List<Operation> OperationsList = new List<Operation> ();
     private static MemoryStream memStream;
     private static BinaryReader reader;
-    private static int maxSocketNum = 3;
+    private static int maxSocketNum = 10;
 
     private const int MAX_READ = 8192;
     private static byte[] byteBuffer;
@@ -28,8 +28,11 @@ public class SocketServer :Singleton<SocketServer>
     private static MemoryStream receiveStream = new MemoryStream();
     private static MemoryStream operationsStream = new MemoryStream();
     private static int serialNumber = 0;
-    private Timer roomInfoTimer;
-    private static bool notifyRoomInfoFlag = false;
+    private static Timer roomInfoTimer;
+    private static bool StartFightFlag = false;
+    private static List<RoomPlayerInfo> roomInfoList = new List<RoomPlayerInfo>();
+    private static float[] xPos = new float[10];
+    private static float[] zPos = new float[10];
     public  void Start()
     {
         byteBuffer = new byte[MAX_READ];
@@ -60,9 +63,14 @@ public class SocketServer :Singleton<SocketServer>
         threadwatch.Start();
         GameModel.serverStartFlag = true;
 
-        roomInfoTimer = TimerManager.GetInstance().createTimer(0.1f, NotifyRoomInfo);
+        roomInfoTimer = TimerManager.GetInstance().createTimer(0.3f, NotifyRoomInfo);
         roomInfoTimer.start();
         Debug.Log("*******服务器启动成功*******");
+        for (int i = 0; i < 10; i++)
+        {
+            xPos[i] = UnityEngine.Random.Range(-1.0f, 1.0f);
+            zPos[i] = UnityEngine.Random.Range(-1.0f, 1.0f);
+        }
     }
     public void Update()
     {
@@ -90,26 +98,24 @@ public class SocketServer :Singleton<SocketServer>
     }
     static void NotifyRoomInfo()
     {
-        if (notifyRoomInfoFlag)
-            return;
+        if (StartFightFlag)
+            roomInfoTimer.stop();
+            
         MessageNotifyRoomInfo msg = new MessageNotifyRoomInfo();
-        msg.PlayerCount = clientConnectionItems.Count;
         //0：等待 1:开战中 
-        if (clientConnectionItems.Count >= maxSocketNum)
-        {
-            msg.FightState = 1;
-            notifyRoomInfoFlag = true;
-        }
-        else
-            msg.FightState = 0;
-        MemoryStream memory = new MemoryStream();
-        Google.Protobuf.MessageExtensions.WriteTo(msg, memory);
-        ByteBuffer buffer = createByteBuffer((ushort)MSG_CS.NotifyRoomInfo, memory);
+        msg.FightState = StartFightFlag ? 1 : 0;
+        msg.PlayerInfoArray.AddRange(roomInfoList);
         foreach (var client in clientConnectionItems)
         {
+            msg.SelfUid = client.Key;
+            MemoryStream memory = new MemoryStream();
+            Google.Protobuf.MessageExtensions.WriteTo(msg, memory);
+            ByteBuffer buffer = createByteBuffer((ushort)MSG_CS.NotifyRoomInfo, memory);
+
             client.Value.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
         }
     }
+
     //监听客户端发来的请求  
     static void watchconnecting()
     {
@@ -150,6 +156,11 @@ public class SocketServer :Singleton<SocketServer>
             Debug.Log("成功与" + remoteEndPoint + "客户端建立连接！");
             //添加客户端信息  
             clientConnectionItems.Add(remoteEndPoint, connection);
+            RoomPlayerInfo _info = new RoomPlayerInfo();
+            _info.Uid = remoteEndPoint;
+            _info.XInitialPos = xPos[clientConnectionItems.Count];
+            _info.ZInitialPos = zPos[clientConnectionItems.Count];
+            roomInfoList.Add(_info);
 
             //IPEndPoint netpoint = new IPEndPoint(clientIP,clientPort); 
             IPEndPoint netpoint = connection.RemoteEndPoint as IPEndPoint;
@@ -231,7 +242,10 @@ public class SocketServer :Singleton<SocketServer>
                                     OperationsList.Add(ope.PlayerOperation);
                                     break;
                                 }
-                                    
+                            case (ushort)MSG_CS.ReqStartFight:
+                                StartFightFlag = true;
+                                NotifyRoomInfo();
+                                break;
                             default:
                                 Debug.LogError("服务端没有此协议：" + msgId);
                                 break;

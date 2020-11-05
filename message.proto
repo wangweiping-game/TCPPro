@@ -13,6 +13,7 @@ enum MSG_CS
 	MSG_CS_NOTIFY_CLIENT_OPERATIONS = 1006; //客户端发送操作指令
 	MSG_CS_NOTIFY_SYNC_OPERATIONS = 1007; //服务器同步所有客户端
 	MSG_CS_NOTIFY_ROOM_INFO = 1008;
+	MSG_CS_REQ_START_FIGHT = 1009; //请求进入战斗
 }
 enum Command
 {	

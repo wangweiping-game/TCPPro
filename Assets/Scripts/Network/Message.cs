@@ -36,16 +36,20 @@ namespace API {
             "IkcKG01lc3NhZ2VOb3RpZnlTeW5jT3BlcmF0aW9ucxIoChBwbGF5ZXJPcGVy",
             "YXRpb25zGAEgAygLMg4uQVBJLk9wZXJhdGlvbiJICh1NZXNzYWdlTm90aWZ5",
             "Q2xpZW50T3BlcmF0aW9ucxInCg9wbGF5ZXJPcGVyYXRpb24YASABKAsyDi5B",
-            "UEkuT3BlcmF0aW9uIkAKFU1lc3NhZ2VOb3RpZnlSb29tSW5mbxITCgtwbGF5",
-            "ZXJDb3VudBgBIAEoBRISCgpGaWdodFN0YXRlGAIgASgFKqECCgZNU0dfQ1MS",
-            "DwoLTVNHX0NTX05PTkUQABIaChVNU0dfQ1NfUkVRX0hFQVJUX0JFQVQQ6AcS",
-            "GgoVTVNHX0NTX1JFU19IRUFSVF9CRUFUEOkHEhUKEE1TR19DU19SRVFfTE9H",
-            "SU4Q6gcSFQoQTVNHX0NTX1JFU19MT0dJThDrBxIbChZNU0dfQ1NfUkVRX1RP",
-            "S0VOX0NIRUNLEOwHEhsKFk1TR19DU19SRVNfVE9LRU5fQ0hFQ0sQ7QcSJAof",
-            "TVNHX0NTX05PVElGWV9DTElFTlRfT1BFUkFUSU9OUxDuBxIiCh1NU0dfQ1Nf",
-            "Tk9USUZZX1NZTkNfT1BFUkFUSU9OUxDvBxIcChdNU0dfQ1NfTk9USUZZX1JP",
-            "T01fSU5GTxDwBypACgdDb21tYW5kEhAKDENvbW1hbmRfTm9uZRAAEhAKDENv",
-            "bW1hbmRfTW92ZRABEhEKDUNvbW1hbmRfU2hvb3QQAmIGcHJvdG8z"));
+            "UEkuT3BlcmF0aW9uIkcKDlJvb21QbGF5ZXJJbmZvEgsKA1VpZBgBIAEoCRIT",
+            "Cgt4SW5pdGlhbFBvcxgCIAEoAhITCgt6SW5pdGlhbFBvcxgDIAEoAiJqChVN",
+            "ZXNzYWdlTm90aWZ5Um9vbUluZm8SDwoHc2VsZlVpZBgBIAEoCRIsCg9wbGF5",
+            "ZXJJbmZvQXJyYXkYAiADKAsyEy5BUEkuUm9vbVBsYXllckluZm8SEgoKRmln",
+            "aHRTdGF0ZRgDIAEoBSq+AgoGTVNHX0NTEg8KC01TR19DU19OT05FEAASGgoV",
+            "TVNHX0NTX1JFUV9IRUFSVF9CRUFUEOgHEhoKFU1TR19DU19SRVNfSEVBUlRf",
+            "QkVBVBDpBxIVChBNU0dfQ1NfUkVRX0xPR0lOEOoHEhUKEE1TR19DU19SRVNf",
+            "TE9HSU4Q6wcSGwoWTVNHX0NTX1JFUV9UT0tFTl9DSEVDSxDsBxIbChZNU0df",
+            "Q1NfUkVTX1RPS0VOX0NIRUNLEO0HEiQKH01TR19DU19OT1RJRllfQ0xJRU5U",
+            "X09QRVJBVElPTlMQ7gcSIgodTVNHX0NTX05PVElGWV9TWU5DX09QRVJBVElP",
+            "TlMQ7wcSHAoXTVNHX0NTX05PVElGWV9ST09NX0lORk8Q8AcSGwoWTVNHX0NT",
+            "X1JFUV9TVEFSVF9GSUdIVBDxBypACgdDb21tYW5kEhAKDENvbW1hbmRfTm9u",
+            "ZRAAEhAKDENvbW1hbmRfTW92ZRABEhEKDUNvbW1hbmRfU2hvb3QQAmIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::API.MSG_CS), typeof(global::API.Command), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -58,7 +62,8 @@ namespace API {
             new pbr::GeneratedClrTypeInfo(typeof(global::API.Operation), global::API.Operation.Parser, new[]{ "CommandType", "Data" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageNotifySyncOperations), global::API.MessageNotifySyncOperations.Parser, new[]{ "PlayerOperations" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageNotifyClientOperations), global::API.MessageNotifyClientOperations.Parser, new[]{ "PlayerOperation" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageNotifyRoomInfo), global::API.MessageNotifyRoomInfo.Parser, new[]{ "PlayerCount", "FightState" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::API.RoomPlayerInfo), global::API.RoomPlayerInfo.Parser, new[]{ "Uid", "XInitialPos", "ZInitialPos" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::API.MessageNotifyRoomInfo), global::API.MessageNotifyRoomInfo.Parser, new[]{ "SelfUid", "PlayerInfoArray", "FightState" }, null, null, null, null)
           }));
     }
     #endregion
@@ -82,6 +87,10 @@ namespace API {
     /// </summary>
     [pbr::OriginalName("MSG_CS_NOTIFY_SYNC_OPERATIONS")] NotifySyncOperations = 1007,
     [pbr::OriginalName("MSG_CS_NOTIFY_ROOM_INFO")] NotifyRoomInfo = 1008,
+    /// <summary>
+    ///请求进入战斗
+    /// </summary>
+    [pbr::OriginalName("MSG_CS_REQ_START_FIGHT")] ReqStartFight = 1009,
   }
 
   public enum Command {
@@ -1819,6 +1828,250 @@ namespace API {
 
   }
 
+  public sealed partial class RoomPlayerInfo : pb::IMessage<RoomPlayerInfo>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<RoomPlayerInfo> _parser = new pb::MessageParser<RoomPlayerInfo>(() => new RoomPlayerInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<RoomPlayerInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::API.MessageReflection.Descriptor.MessageTypes[9]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RoomPlayerInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RoomPlayerInfo(RoomPlayerInfo other) : this() {
+      uid_ = other.uid_;
+      xInitialPos_ = other.xInitialPos_;
+      zInitialPos_ = other.zInitialPos_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RoomPlayerInfo Clone() {
+      return new RoomPlayerInfo(this);
+    }
+
+    /// <summary>Field number for the "Uid" field.</summary>
+    public const int UidFieldNumber = 1;
+    private string uid_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Uid {
+      get { return uid_; }
+      set {
+        uid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "xInitialPos" field.</summary>
+    public const int XInitialPosFieldNumber = 2;
+    private float xInitialPos_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float XInitialPos {
+      get { return xInitialPos_; }
+      set {
+        xInitialPos_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "zInitialPos" field.</summary>
+    public const int ZInitialPosFieldNumber = 3;
+    private float zInitialPos_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float ZInitialPos {
+      get { return zInitialPos_; }
+      set {
+        zInitialPos_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as RoomPlayerInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(RoomPlayerInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Uid != other.Uid) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(XInitialPos, other.XInitialPos)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ZInitialPos, other.ZInitialPos)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Uid.Length != 0) hash ^= Uid.GetHashCode();
+      if (XInitialPos != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(XInitialPos);
+      if (ZInitialPos != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ZInitialPos);
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Uid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Uid);
+      }
+      if (XInitialPos != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(XInitialPos);
+      }
+      if (ZInitialPos != 0F) {
+        output.WriteRawTag(29);
+        output.WriteFloat(ZInitialPos);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Uid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Uid);
+      }
+      if (XInitialPos != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(XInitialPos);
+      }
+      if (ZInitialPos != 0F) {
+        output.WriteRawTag(29);
+        output.WriteFloat(ZInitialPos);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Uid.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Uid);
+      }
+      if (XInitialPos != 0F) {
+        size += 1 + 4;
+      }
+      if (ZInitialPos != 0F) {
+        size += 1 + 4;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(RoomPlayerInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Uid.Length != 0) {
+        Uid = other.Uid;
+      }
+      if (other.XInitialPos != 0F) {
+        XInitialPos = other.XInitialPos;
+      }
+      if (other.ZInitialPos != 0F) {
+        ZInitialPos = other.ZInitialPos;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Uid = input.ReadString();
+            break;
+          }
+          case 21: {
+            XInitialPos = input.ReadFloat();
+            break;
+          }
+          case 29: {
+            ZInitialPos = input.ReadFloat();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Uid = input.ReadString();
+            break;
+          }
+          case 21: {
+            XInitialPos = input.ReadFloat();
+            break;
+          }
+          case 29: {
+            ZInitialPos = input.ReadFloat();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   public sealed partial class MessageNotifyRoomInfo : pb::IMessage<MessageNotifyRoomInfo>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -1831,7 +2084,7 @@ namespace API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::API.MessageReflection.Descriptor.MessageTypes[9]; }
+      get { return global::API.MessageReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1848,7 +2101,8 @@ namespace API {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MessageNotifyRoomInfo(MessageNotifyRoomInfo other) : this() {
-      playerCount_ = other.playerCount_;
+      selfUid_ = other.selfUid_;
+      playerInfoArray_ = other.playerInfoArray_.Clone();
       fightState_ = other.fightState_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -1858,19 +2112,29 @@ namespace API {
       return new MessageNotifyRoomInfo(this);
     }
 
-    /// <summary>Field number for the "playerCount" field.</summary>
-    public const int PlayerCountFieldNumber = 1;
-    private int playerCount_;
+    /// <summary>Field number for the "selfUid" field.</summary>
+    public const int SelfUidFieldNumber = 1;
+    private string selfUid_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int PlayerCount {
-      get { return playerCount_; }
+    public string SelfUid {
+      get { return selfUid_; }
       set {
-        playerCount_ = value;
+        selfUid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
+    /// <summary>Field number for the "playerInfoArray" field.</summary>
+    public const int PlayerInfoArrayFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::API.RoomPlayerInfo> _repeated_playerInfoArray_codec
+        = pb::FieldCodec.ForMessage(18, global::API.RoomPlayerInfo.Parser);
+    private readonly pbc::RepeatedField<global::API.RoomPlayerInfo> playerInfoArray_ = new pbc::RepeatedField<global::API.RoomPlayerInfo>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::API.RoomPlayerInfo> PlayerInfoArray {
+      get { return playerInfoArray_; }
+    }
+
     /// <summary>Field number for the "FightState" field.</summary>
-    public const int FightStateFieldNumber = 2;
+    public const int FightStateFieldNumber = 3;
     private int fightState_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int FightState {
@@ -1893,7 +2157,8 @@ namespace API {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerCount != other.PlayerCount) return false;
+      if (SelfUid != other.SelfUid) return false;
+      if(!playerInfoArray_.Equals(other.playerInfoArray_)) return false;
       if (FightState != other.FightState) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1901,7 +2166,8 @@ namespace API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerCount != 0) hash ^= PlayerCount.GetHashCode();
+      if (SelfUid.Length != 0) hash ^= SelfUid.GetHashCode();
+      hash ^= playerInfoArray_.GetHashCode();
       if (FightState != 0) hash ^= FightState.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1919,12 +2185,13 @@ namespace API {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerCount != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PlayerCount);
+      if (SelfUid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(SelfUid);
       }
+      playerInfoArray_.WriteTo(output, _repeated_playerInfoArray_codec);
       if (FightState != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(FightState);
       }
       if (_unknownFields != null) {
@@ -1936,12 +2203,13 @@ namespace API {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerCount != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PlayerCount);
+      if (SelfUid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(SelfUid);
       }
+      playerInfoArray_.WriteTo(ref output, _repeated_playerInfoArray_codec);
       if (FightState != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(FightState);
       }
       if (_unknownFields != null) {
@@ -1953,9 +2221,10 @@ namespace API {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerCount != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerCount);
+      if (SelfUid.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SelfUid);
       }
+      size += playerInfoArray_.CalculateSize(_repeated_playerInfoArray_codec);
       if (FightState != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(FightState);
       }
@@ -1970,9 +2239,10 @@ namespace API {
       if (other == null) {
         return;
       }
-      if (other.PlayerCount != 0) {
-        PlayerCount = other.PlayerCount;
+      if (other.SelfUid.Length != 0) {
+        SelfUid = other.SelfUid;
       }
+      playerInfoArray_.Add(other.playerInfoArray_);
       if (other.FightState != 0) {
         FightState = other.FightState;
       }
@@ -1990,11 +2260,15 @@ namespace API {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 8: {
-            PlayerCount = input.ReadInt32();
+          case 10: {
+            SelfUid = input.ReadString();
             break;
           }
-          case 16: {
+          case 18: {
+            playerInfoArray_.AddEntriesFrom(input, _repeated_playerInfoArray_codec);
+            break;
+          }
+          case 24: {
             FightState = input.ReadInt32();
             break;
           }
@@ -2012,11 +2286,15 @@ namespace API {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 8: {
-            PlayerCount = input.ReadInt32();
+          case 10: {
+            SelfUid = input.ReadString();
             break;
           }
-          case 16: {
+          case 18: {
+            playerInfoArray_.AddEntriesFrom(ref input, _repeated_playerInfoArray_codec);
+            break;
+          }
+          case 24: {
             FightState = input.ReadInt32();
             break;
           }

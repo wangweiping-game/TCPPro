@@ -11,12 +11,29 @@ public class PlayerControl : MonoBehaviour
 
     Operation opetion = new Operation();
 
+    private void Awake()
+    {
+        Singleton<GameModel>.GetInstance().addEvent("command_event", MoveCallback);
+    }
     void Start()
     {
-        playerDic.Add(Singleton<GameModel>.GetInstance().PlayerID, gameObject);
-        gameObject.name = Singleton<GameModel>.GetInstance().PlayerID;
-        //NetworkManager.GetInstance().AddHandle((int)MSG_CS.NotifySyncOperations, NotifySynOperations);
-        resetOffset();
+        List<RoomPlayerInfo> roominfo = Singleton<GameModel>.GetInstance().roomInfoList;
+
+        foreach (var item in roominfo)
+        {
+            if (!playerDic.ContainsKey(item.Uid))
+            {
+                GameObject obj = Resources.Load("Sphere") as GameObject;
+                obj = GameObject.Instantiate(obj);
+                obj.transform.parent = gameObject.transform;
+                obj.name = item.Uid;
+                obj.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+                obj.transform.localPosition = new Vector3(item.XInitialPos, 0.05f, item.ZInitialPos);
+                playerDic.Add(item.Uid, obj);
+            }
+           // playerDic[item.Uid].transform.Translate(new Vector3(item.XInitialPos, 0, item.ZInitialPos));
+            //Debug.Log("同步 " + item.Uid + " 位置：" + item.XInitialPos + "  " + item.ZInitialPos);
+        }
     }
 
     void Update()
@@ -43,8 +60,8 @@ public class PlayerControl : MonoBehaviour
         xOffset++;
         zOffset++;
     }
-    public void NotifySynOperations(MemoryStream stream)
-    {
+    //public void NotifySynOperations(MemoryStream stream)
+    //{
         //MessageNotifySyncOperations res = MessageNotifySyncOperations.Parser.ParseFrom(stream);
         //foreach (var item in res.PlayerOperations)
         //{
@@ -62,5 +79,29 @@ public class PlayerControl : MonoBehaviour
         //    Debug.Log("同步 " + item.PlayerId + " 位置：" + item.XOffset + "  " + item.ZOffset);
         //}
 
+    //}
+
+    public void onClickDirectionBtn(string direction)
+    {
+        InitService.GetInstance().NotifyClientOperations(Command.Move, direction);
+    }
+
+    public void MoveCallback(EventObject eo)
+    {
+        string str = eo.obj.ToString();
+        string[] datas = str.Split('_');
+        if (datas.Length <= 0)
+            return;
+        if (playerDic.ContainsKey(datas[0]))
+        {
+            playerDic[datas[0]].transform.localPosition = 
+                new Vector3(playerDic[datas[0]].transform.localPosition.x + int.Parse(datas[1])*0.1f,0.05f,
+                playerDic[datas[0]].transform.localPosition.z + int.Parse(datas[2]) * 0.1f);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Singleton<GameModel>.GetInstance().removeEvent("command_event", MoveCallback);
     }
 }

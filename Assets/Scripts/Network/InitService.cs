@@ -18,7 +18,7 @@ public class InitService :Singleton<InitService>
         MessageNotifyClientOperations msg = new MessageNotifyClientOperations();
         Operation info = new Operation();
         info.CommandType = type;
-        info.Data = param;
+        info.Data = Singleton<GameModel>.GetInstance().UID + "_" + param;
         msg.PlayerOperation = info;
         NetworkManager.GetInstance().SendMessage(MSG_CS.NotifyClientOperations, msg);
     }
@@ -61,10 +61,14 @@ public class InitService :Singleton<InitService>
     {
         MessageResponseLogin res = MessageResponseLogin.Parser.ParseFrom(stream);
         Singleton<GameModel>.GetInstance().Token = res.Token;
-        Singleton<GameModel>.GetInstance().PlayerID = res.PlayerId;
+        //Singleton<GameModel>.GetInstance().PlayerID = res.PlayerId;
 
         UnityEngine.SceneManagement.SceneManager.LoadScene("Play");
         Debug.Log("Res login：" + res.Token);
     }
 
+    public void ReqStartFight()
+    {
+        NetworkManager.GetInstance().SendMessage((ushort)MSG_CS.ReqStartFight);
+    }
 }

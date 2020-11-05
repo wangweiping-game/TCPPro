@@ -16,13 +16,15 @@ public class LoginFrame : MonoBehaviour
     public Text promptText;
     public GameObject WaitFrame;
     public Text playerNumText;
+    public GameObject startFigthBtn;
     private Timer heartTimer;
 
     private void Start()
     {
-        Debug.Log(getSelfIp());
+        //Debug.Log(getSelfIp());
         NetworkManager.GetInstance().AddHandle((int)MSG_CS.NotifyRoomInfo, UpdateRoomInfo);
         heartTimer = TimerManager.GetInstance().createTimer(0.1f, heartEvent);
+        startFigthBtn.SetActive(false);
     }
     public void ClickStartServer()
     {
@@ -46,6 +48,10 @@ public class LoginFrame : MonoBehaviour
         }
 
         InitService.GetInstance().onLoginRequst( input_account.text);
+    }
+    public void onClickStartFight()
+    {
+        InitService.GetInstance().ReqStartFight();
     }
   
     public void onClickCreateRoomBtn()
@@ -118,6 +124,7 @@ public class LoginFrame : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         WaitFrame.SetActive(true);
+        startFigthBtn.SetActive(true);
     }
     IEnumerator joinRoomCallBack()
     {
@@ -136,9 +143,13 @@ public class LoginFrame : MonoBehaviour
     void UpdateRoomInfo(MemoryStream ms)
     {
         MessageNotifyRoomInfo info = MessageNotifyRoomInfo.Parser.ParseFrom(ms);
-        playerNumText.text = info.PlayerCount.ToString();
-        if(info.FightState == 1)
+        playerNumText.text = info.PlayerInfoArray.Count.ToString();
+        
+        if (info.FightState == 1)
         {
+            Singleton<GameModel>.GetInstance().UID = info.SelfUid;
+            Singleton<GameModel>.GetInstance().roomInfoList.Clear();
+            Singleton<GameModel>.GetInstance().roomInfoList.AddRange(info.PlayerInfoArray);
             heartTimer.stop();
             UnityEngine.SceneManagement.SceneManager.LoadScene("Play");
         }
