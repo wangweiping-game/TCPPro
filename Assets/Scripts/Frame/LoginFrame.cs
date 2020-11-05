@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -14,10 +16,13 @@ public class LoginFrame : MonoBehaviour
     public Text promptText;
     public GameObject WaitFrame;
     public Text playerNumText;
+    private Timer heartTimer;
 
     private void Start()
     {
+        Debug.Log(getSelfIp());
         NetworkManager.GetInstance().AddHandle((int)MSG_CS.NotifyRoomInfo, UpdateRoomInfo);
+        heartTimer = TimerManager.GetInstance().createTimer(0.1f, heartEvent);
     }
     public void ClickStartServer()
     {
@@ -53,8 +58,11 @@ public class LoginFrame : MonoBehaviour
     {
         StartCoroutine(createRoom("get"));
     }
-
-    IEnumerator createRoom(string url)
+    void heartEvent()
+    {
+        StartCoroutine(createRoom("create", true));
+    }
+    IEnumerator createRoom(string url,bool isHeart = false)
     {
         UnityWebRequest webRequest = UnityWebRequest.Get(GameModel.serverUrl + url);
         yield return webRequest.SendWebRequest();
@@ -63,8 +71,11 @@ public class LoginFrame : MonoBehaviour
             Debug.Log(webRequest.error);
         else
         {
-            Debug.Log(webRequest.downloadHandler.text);
-            analyDownLoadText(url,webRequest.downloadHandler.text);
+            if(!isHeart)
+            {
+                Debug.Log(webRequest.downloadHandler.text);
+                analyDownLoadText(url, webRequest.downloadHandler.text);
+            }
         }
     }
     void analyDownLoadText(string url,string str)
@@ -88,7 +99,7 @@ public class LoginFrame : MonoBehaviour
                 StartCoroutine(joinRoomCallBack());
                 break;
             case "create":
-                GameModel.roomServerIp ="127.0.0.1";
+                GameModel.roomServerIp = getSelfIp();
                 StartCoroutine(createRoomCallBack());
                 break;
             default:
@@ -101,6 +112,7 @@ public class LoginFrame : MonoBehaviour
     {
         SocketServer.GetInstance().Start();
         showPrompt("房间创建成功，请等待其他玩家的加入！");
+        heartTimer.start();
         yield return new WaitForSeconds(0.5f);
         NetStateManager.GetInstance().startConnect();
         yield return new WaitForSeconds(0.5f);
@@ -127,7 +139,22 @@ public class LoginFrame : MonoBehaviour
         playerNumText.text = info.PlayerCount.ToString();
         if(info.FightState == 1)
         {
+            heartTimer.stop();
             UnityEngine.SceneManagement.SceneManager.LoadScene("Play");
         }
+    }
+    string getSelfIp()
+    {
+        ///获取本地的IP地址
+        string AddressIP = string.Empty;
+        foreach (IPAddress _IPAddress in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+        {
+            if (_IPAddress.AddressFamily.ToString() == "InterNetwork")
+            {
+                AddressIP = _IPAddress.ToString();
+            }
+        }
+        return AddressIP;
+
     }
 }

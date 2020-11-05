@@ -39,7 +39,7 @@ public class SocketServer :Singleton<SocketServer>
         //定义一个套接字用于监听客户端发来的消息，包含三个参数（IP4寻址协议，流式连接，Tcp协议）  
         socketwatch = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         //服务端发送信息需要一个IP地址和端口号  
-        IPAddress address = IPAddress.Parse("127.0.0.1");
+        IPAddress address = IPAddress.Parse(GameModel.roomServerIp);
         //将IP地址和端口号绑定到网络节点point上  
         IPEndPoint point = new IPEndPoint(address, 1234);
         //此端口专门用来监听的  
