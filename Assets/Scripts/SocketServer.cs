@@ -111,8 +111,8 @@ public class SocketServer :Singleton<SocketServer>
             MemoryStream memory = new MemoryStream();
             Google.Protobuf.MessageExtensions.WriteTo(msg, memory);
             ByteBuffer buffer = createByteBuffer((ushort)MSG_CS.NotifyRoomInfo, memory);
-
-            client.Value.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
+            if(client.Value.Connected)
+                client.Value.BeginSend(buffer.ToBytes(), 0, buffer.ToBytes().Length, SocketFlags.None, null, null);
         }
     }
 
@@ -276,6 +276,29 @@ public class SocketServer :Singleton<SocketServer>
             }
             catch (Exception ex)
             {
+                List<string> key = new List<string>();
+                foreach (var item in clientConnectionItems)
+                {
+                    if(!item.Value.Connected)
+                    {
+                        key.Add(item.Key);
+                    }
+                }
+                for (int i = 0; i < key.Count; i++)
+                {
+                    for (int j = 0; j < roomInfoList.Count; j++)
+                    {
+                        if (roomInfoList[j].Uid == key[i])
+                        {
+                            roomInfoList.RemoveAt(j);
+                            break;
+                        }
+                    }
+                    clientConnectionItems[key[i]].Close();
+                    Debug.Log("客户端" + key[i] + "已经中断连接");
+                    clientConnectionItems.Remove(key[i]);
+                }
+                return;
                 clientConnectionItems.Remove(socketServer.RemoteEndPoint.ToString());
 
                 Console.WriteLine("Client Count:" + clientConnectionItems.Count);
