@@ -7,12 +7,7 @@ using Google.Protobuf;
 
 public class InitService :Singleton<InitService>
 {
-    public InitService()
-    {
-        init();
-    }
-
-    void init()
+    public void init()
     {
         NetworkManager.GetInstance().AddHandle((int)MSG_CS.ResLogin, onLoginResponse);
         NetworkManager.GetInstance().AddHandle((int)MSG_CS.NotifySyncOperations, NotifySynOperations);

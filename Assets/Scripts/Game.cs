@@ -8,6 +8,7 @@ public class Game : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(gameObject);
+        InitService.GetInstance().init();
         NetStateManager.GetInstance().Start();
     }
 
