@@ -2,15 +2,6 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
 
-/// <summary>
-/// Author: syg
-/// 事件触发封装 - 需要什么事件可扩展
-/// Event trigger listener.
-/// EventTriggerListener.Get(YourButton).onClick = onClickButtonHandler;
-/// private void onClickButtonHandler( GameObject obj ){
-/// Debuger.Log("点击到了你的按钮");
-///	｝
-/// </summary>
 public class EventTriggerListener : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
 {
     public delegate void VoidDelegate(GameObject go);
@@ -21,10 +12,18 @@ public class EventTriggerListener : MonoBehaviour, IPointerClickHandler, IPointe
     public VoidDelegate onUp;
     static public EventTriggerListener Get(GameObject go)
     {
-        EventTriggerListener listener = go.GetComponent<EventTriggerListener>();
-        if (listener == null)
-            listener = go.AddComponent<EventTriggerListener>();
-        return listener;
+        if (go == null)
+        {
+            Debug.LogError("BtnEventTriggerListener_go_is_NULL");
+            return null;
+        }
+        else
+        {
+            EventTriggerListener listener = go.GetComponent<EventTriggerListener>();
+            if (listener == null)
+                listener = go.AddComponent<EventTriggerListener>();
+            return listener;
+        }
     }
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -50,5 +49,13 @@ public class EventTriggerListener : MonoBehaviour, IPointerClickHandler, IPointe
     {
         if (onUp != null)
             onUp(gameObject);
+    }
+    public void clearAllListener()
+    {
+        onClick = null;
+        onDown = null;
+        onExit = null;
+        onUp = null;
+        Destroy(gameObject.GetComponent<EventTriggerListener>());
     }
 }
